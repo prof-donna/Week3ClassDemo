@@ -24,7 +24,7 @@ namespace Week3ClassDemo.Controllers
                 },
 
                 new Article {
-                    Author = "Donna H",
+                    Author = "Donna H", 
                     Title = "A Second Article",
                     Body = "More words are great.",
                     DateCreated = DateTime.Now
