@@ -1,0 +1,50 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model Week3ClassDemo.Models.Article
+
+@{
+    ViewData["Title"] = "Example of Using a Form and a Model";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<hr />
+
+<h2>Create a New Article</h2>
+
+<fieldset>
+    @using (Html.BeginForm())
+    {
+
+        <p>
+            @Html.LabelFor(model => model.Author)
+            @Html.EditorFor(model => model.Author)
+        </p>
+        <p>
+            @Html.LabelFor(model => model.Title)
+            @Html.EditorFor(model => model.Title)
+        </p>
+        <p>
+            @Html.LabelFor(model => model.Body)
+            @Html.EditorFor(model => model.Body)
+        </p>
+
+        <button type="submit">Create New Article</button>
+
+    }
+
+
+</fieldset>
+
+<hr/>
+
+@if (Model != null)
+{ 
+    <h2>Article to be submitted...</h2>
+
+    <h3>@Model.Title</h3>
+    <p>Posted by @Model.Author at @Model.DateCreated</p>
+    <p>@Model.Body</p>
+}

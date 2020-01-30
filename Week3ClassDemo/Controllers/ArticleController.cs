@@ -25,5 +25,19 @@ namespace Week3ClassDemo.Controllers
 
             return View(article);
         }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(Article article)
+        {
+            article.DateCreated = DateTime.Now;
+            
+            return View(article);
+        }
     }
 }
