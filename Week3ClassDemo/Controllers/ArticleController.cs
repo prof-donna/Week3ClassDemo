@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using DataModels;
 using Library.BusinessLogic;
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,6 +14,14 @@ namespace Week3ClassDemo.Controllers
 {
     public class ArticleController : Controller
     {
+        private IConfiguration _configuration;
+
+        public ArticleController(IConfiguration Configuration)
+        {
+            _configuration = Configuration;
+        }
+
+
         public IActionResult Index()
         {
 
@@ -68,7 +78,7 @@ namespace Week3ClassDemo.Controllers
 
         public IActionResult Listing()
         {
-            ArticleHandler handler = new ArticleHandler();
+            ArticleHandler handler = new ArticleHandler(_configuration);
 
             var articles = handler.GetAllArticles();
 
