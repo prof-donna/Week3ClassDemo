@@ -26,5 +26,13 @@ namespace Library.BusinessLogic
             return articles;
         }
 
+        public object AddArticle(Article article)
+        {
+            DataAccess db = new DataAccess(_configuration);
+
+            var articles = db.AddArticleToDatabase(article);
+
+            return articles;
+        }
     }
 }

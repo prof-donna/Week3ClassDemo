@@ -2,11 +2,17 @@
 using DataModels;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using Dapper;
+using System.Linq;
 
 namespace DAL
 {
     public class DataAccess
     {
+        private readonly string ConnectionStringName = "DefaultConnection";
+        
         private IConfiguration _configuration;
 
         public DataAccess() { }
@@ -18,24 +24,27 @@ namespace DAL
 
         public Article[] GetAllArticlesFromDatabase()
         {
-            var articles = new[] {
-                new Article() {
-                    Author = "Donna H",
-                    Title = "My Title",
-                    Body = "This is awesome text",
-                    DateCreated = DateTime.Now
-                },
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection( Helper.BlogConnectionStringValue( _configuration, ConnectionStringName ) ) )
+            {
+                Article[] articles = connection.Query<Article>("select * from Articles order by id asc").ToArray();
 
-                new Article() {
-                    Author = "Prof Donna Harris",
-                    Title = "My Article about Testing",
-                    Body = "Testing is cool. Everybody should learn to test.",
-                    DateCreated = DateTime.Now
-                }
-            };
-
-            return articles;
+                return articles;
+            }
         }
 
+        public object AddArticleToDatabase(Article newArticle)
+        {
+            string queryString = "INSERT INTO Articles (Author, Title, Body, DateCreated) VALUES ( '" + newArticle.Author + "', '" + newArticle.Title + "', '" + newArticle.Body + "', '" + newArticle.DateCreated + "');";
+
+            using (IDbConnection connection = new System.Data.SqlClient.SqlConnection(Helper.BlogConnectionStringValue(_configuration, ConnectionStringName)))
+            {
+                Article[] articles = connection.Query<Article>(queryString).ToArray();
+
+                return articles;
+            }
+
+
+
+        }
     }
 }

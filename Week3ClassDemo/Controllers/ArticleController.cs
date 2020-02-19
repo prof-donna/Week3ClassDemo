@@ -72,7 +72,14 @@ namespace Week3ClassDemo.Controllers
         {
             article.DateCreated = DateTime.Now;
 
-            return View(article);
+            ArticleHandler handler = new ArticleHandler(_configuration);
+
+            var newArticle = handler.AddArticle(article);
+
+
+            return RedirectToAction("Listing");
+
+            //return View(article);
         }
 
 
