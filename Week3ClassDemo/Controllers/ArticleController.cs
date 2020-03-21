@@ -8,6 +8,7 @@ using Library.BusinessLogic;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
 
+
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Week3ClassDemo.Controllers
@@ -20,7 +21,6 @@ namespace Week3ClassDemo.Controllers
         {
             _configuration = Configuration;
         }
-
 
         public IActionResult Index()
         {
@@ -72,24 +72,108 @@ namespace Week3ClassDemo.Controllers
         {
             article.DateCreated = DateTime.Now;
 
-            ArticleHandler handler = new ArticleHandler(_configuration);
+            // add in the DB piece
 
-            var newArticle = handler.AddArticle(article);
+            ArticleHandler articleHandler = new ArticleHandler(_configuration);
 
+            //Task<Article> result = articleHandler.CreateNewArticle(article);
+            Article storedArticle = articleHandler.CreateNewArticle(article).Result;
 
-            return RedirectToAction("Listing");
+            // need to do a check on the null-ness of storedArticle... in case something went wrong...
+            if (storedArticle == null)
+            {
+                return View("Index"); // not good yet
+            }
 
             //return View(article);
+            //redirect instead to the view!
+            return RedirectToAction("ViewArticle", storedArticle);
+
         }
 
 
         public IActionResult Listing()
         {
-            ArticleHandler handler = new ArticleHandler(_configuration);
+            ArticleHandler articleHandler = new ArticleHandler(_configuration);
 
-            var articles = handler.GetAllArticles();
+            var articles = articleHandler.GetAllArticles();
 
             return View(articles);
+        }
+
+
+        public IActionResult ViewArticle(int id)
+        {
+            ArticleHandler articleHandler = new ArticleHandler(_configuration);
+
+            var article = articleHandler.GetArticleById(id);
+
+            return View(article);
+        }
+
+        [HttpGet]
+        public IActionResult Delete(Article article)
+        {
+            return View(article);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            ArticleHandler articleHandler = new ArticleHandler(_configuration);
+            bool articleWasDeleted = articleHandler.RemoveArticleById(id);
+
+            //var result = articleHandler.RemoveArticleById(id, true);
+
+            //bool articleWasDeleted = false;
+
+            //if (result != null)
+            //{
+            //    var status = result.Status;
+            //    articleWasDeleted = result.Result;
+
+                if (articleWasDeleted)
+                {
+                    return RedirectToAction("Listing");
+                }
+            //}
+
+            return RedirectToAction("Index"); // a junky problem
+
+
+        }
+
+
+
+
+        [HttpGet]
+        //public IActionResult Edit(Article article)
+        public IActionResult Edit(int? id, Article article)
+        {
+            return View(article);
+        }
+
+        [HttpPost]
+        //public IActionResult Edit(Article article, bool SomethingElse)
+        public IActionResult Edit([Bind("Id,Author,Title,Body")] Article article)
+        {
+            article.DateModified = DateTime.Now;
+
+
+            // add in the DB piece
+
+            ArticleHandler articleHandler = new ArticleHandler(_configuration);
+
+            Article storedArticle = articleHandler.UpdateArticle(article);
+
+            // need to do a check on the null-ness of storedArticle... in case something went wrong...
+            if (storedArticle == null)
+            {
+                return View("Index"); // not good yet .. TODO
+            }
+
+            return RedirectToAction("ViewArticle", storedArticle);
+
         }
 
     }

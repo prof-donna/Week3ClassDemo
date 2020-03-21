@@ -1,26 +1,19 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-
-
-@model IEnumerable<DataModels.Article>
-
+﻿@model IEnumerable<DataModels.Article>
 
 @{
-    ViewData["Title"] = "Article in Action";
+    ViewData["Title"] = "Development Links for Articles";
 }
 
 <h1>@ViewData["Title"]</h1>
 
-<hr/>
-
-
-@foreach (var article in Model)
-{
-
-    <h2>@article.Title</h2>
-
-    <h4>Posted by: @article.Author at @article.DateCreated</h4>
-
-    <p>@article.Body</p>
-}
+<ul>
+    <li>
+        <a asp-controller="Article" asp-action="Listing">Listing Page</a>
+    </li>
+    <li>
+        <a asp-controller="Article" asp-action="Create">Create Page</a>
+    </li>
+    <li>
+        <a asp-controller="Article" asp-action="Delete">Go directly to a delete option</a>
+    </li>
+</ul>
