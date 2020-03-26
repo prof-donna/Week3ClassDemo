@@ -53,7 +53,6 @@
                             @Html.DisplayFor(modelItem => item.Author)
                         </td>
                         <td>
-                            <!--@Html.DisplayFor(modelItem => item.Title)-->
                             @Html.ActionLink(item.Title, "ViewArticle", "Article", new { Id = item.Id })
                         </td>
                         <td>
@@ -66,9 +65,22 @@
                             @Html.DisplayFor(modelItem => item.DateCreated)
                         </td>
                         <td>
-                            @Html.ActionLink("Edit", "Edit", item, new { Id = item.Id }) |
-                            @Html.ActionLink("View", "ViewArticle", new { Id = item.Id }) |
-                            @Html.ActionLink("Delete", "Delete", item, new { Id = item.Id })
+                            @{
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                    if (User.IsInRole("Admin"))
+                                    {
+                                        @Html.ActionLink("Edit", "Edit", item, new { Id = item.Id })
+                                        <span> | </span>
+                                        @Html.ActionLink("Delete", "Delete", item, new { Id = item.Id })
+
+                                    }
+                                    else
+                                    {
+                                        @Html.ActionLink("Edit", "Edit", item, new { Id = item.Id })
+                                    }
+                                }
+                            }
                         </td>
                     </tr>
                 }
