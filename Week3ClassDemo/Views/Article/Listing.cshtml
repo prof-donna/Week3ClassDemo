@@ -9,9 +9,14 @@
 
 <h1>Listing</h1>
 
-<p>
-    <a asp-action="Create">Create New Article</a>
-</p>
+@{ 
+    if (User.Identity.IsAuthenticated) 
+    {
+        <p>
+            <a asp-action="Create">Create New Article</a>
+        </p>
+    }
+}
 
 @{
     if (Model != null)

@@ -7,12 +7,14 @@ using DataModels;
 using Library.BusinessLogic;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Week3ClassDemo.Controllers
 {
+    [Authorize]
     public class ArticleController : Controller
     {
         private IConfiguration _configuration;
@@ -91,7 +93,7 @@ namespace Week3ClassDemo.Controllers
 
         }
 
-
+        [AllowAnonymous]
         public IActionResult Listing()
         {
             ArticleHandler articleHandler = new ArticleHandler(_configuration);
@@ -101,7 +103,7 @@ namespace Week3ClassDemo.Controllers
             return View(articles);
         }
 
-
+        [AllowAnonymous]
         public IActionResult ViewArticle(int id)
         {
             ArticleHandler articleHandler = new ArticleHandler(_configuration);
@@ -111,12 +113,14 @@ namespace Week3ClassDemo.Controllers
             return View(article);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Delete(Article article)
         {
             return View(article);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Delete(int id)
         {

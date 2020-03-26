@@ -20,6 +20,7 @@ namespace Week3ClassDemo.Areas.Identity
                         context.Configuration.GetConnectionString("UserIdentityContextConnection")));
 
                 services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                    .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<UserIdentityContext>();
             });
         }
